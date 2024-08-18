@@ -1,0 +1,72 @@
+{
+  "id": "896f4ed7-dbf0-454a-bed8-13cf8e718893",
+  "name": "Admission Prediction Quality Project",
+  "description": "QA for admission prediction service",
+  "dashboard": {
+    "name": "Admission Prediction Quality Project",
+    "panels": [
+      {
+        "type": "evidently.ui.dashboards.reports.DashboardPanelCounter",
+        "id": "f43bceaa-c72b-477b-9ab9-e1c039998061",
+        "title": "Admission Prediction Dashboard",
+        "filter": {
+          "metadata_values": {},
+          "tag_values": [],
+          "include_test_suites": false
+        },
+        "size": 2,
+        "agg": "none",
+        "value": null,
+        "text": null
+      },
+      {
+        "type": "evidently.ui.dashboards.reports.DashboardPanelPlot",
+        "id": "81a95dcb-6b4b-475a-837f-5e4b8be9be51",
+        "title": "Inference Count",
+        "filter": {
+          "metadata_values": {},
+          "tag_values": [],
+          "include_test_suites": false
+        },
+        "size": 1,
+        "values": [
+          {
+            "field_path": "current.number_of_rows",
+            "metric_id": "DatasetSummaryMetric",
+            "metric_fingerprint": null,
+            "metric_args": {},
+            "legend": "count"
+          }
+        ],
+        "plot_type": "bar"
+      },
+      {
+        "type": "evidently.ui.dashboards.reports.DashboardPanelPlot",
+        "id": "bcd13e82-504e-4d41-9eb0-cb597ce72354",
+        "title": "Number of Missing Values",
+        "filter": {
+          "metadata_values": {},
+          "tag_values": [],
+          "include_test_suites": false
+        },
+        "size": 1,
+        "values": [
+          {
+            "field_path": "current.number_of_missing_values",
+            "metric_id": "DatasetSummaryMetric",
+            "metric_fingerprint": null,
+            "metric_args": {},
+            "legend": "count"
+          }
+        ],
+        "plot_type": "line"
+      }
+    ],
+    "tabs": [],
+    "tab_id_to_panel_ids": {}
+  },
+  "team_id": null,
+  "date_from": null,
+  "date_to": null,
+  "created_at": "2024-08-12T15:15:35.644079"
+}
