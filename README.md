@@ -1,4 +1,4 @@
-![Admission decisions are crucial in emergency rooms](Images\emergency.jpg)<br/>
+![Admission decisions are crucial in emergency rooms](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/emergency.jpg?raw=true)<br/>
 <br/>
 **Admission Prediction Web Service**<br/>
 <br/>
