@@ -114,7 +114,11 @@ The script monitors the prediction drift over time to decide whether model’s p
 <br/>
 After training and registering the best performing model, this model is compared against the model already in production. If the performance improvement is obtained, the deployed model is replaced with newly trained model and monitoring is kept carried out.<br/>
 <br/>
+Model Registry and assigning the best performing model for "Production"<br/>
+<br/>
 ![Model Registry and assigning the best performing model for "Production"](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/mlflow.png?raw=true)<br/>
+<br/>
+Model monitoring: showing a case where prediction drift exceeded the threshold of 0.6 which triggered conditional workflow for retraining model and logging<br/>
 <br/>
 ![Model monitoring: showing a case where prediction drift exceeded the threshold of 0.6 which triggered conditional workflow for retraining model and logging](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/grafana.png?raw=true)<br/>
 <br/>
