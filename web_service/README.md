@@ -116,11 +116,11 @@ Pull the Docker image from the ECR repository:<br/>
 <br/>
 Run the Docker container from the ECR image, exposing the necessary ports and passing the AWS credentials:<br/>
 <br/>
-`docker run -it --rm -p 8501:8501 -p 9696:9696 \<br/>
-   -e AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \<br/>
-   -e AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \<br/>
-   -e AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION}" \<br/>
-   $REMOTE_URI:v1`<br/>
+`docker run -it --rm -p 8501:8501 -p 9696:9696 \`<br/>
+   `-e AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \`<br/>
+   `-e AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \`<br/>
+   `-e AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION}" \`<br/>
+   `$REMOTE_URI:v1`<br/>
 <br/>
 **3.Run Streamlit Application**<br/>
 <br/>
