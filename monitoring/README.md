@@ -120,7 +120,7 @@ Model Registry and assigning the best performing model for "Production" on MLflo
 <br/>
 ![Model Registry and assigning the best performing model for "Production"](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/mlflow.png?raw=true)<br/>
 <br/>
-The stored artifacts of logged and registered XGBoost model in "Production" on S3 bucket<br/>
+The stored artifacts of logged and registered XGBoost model in "Production" on S3 bucket. The screenshot of S3 bucket for trained models (sklearn logistic regression and XGBoost) of performance comparison as well as registered "Production" and "Staging" models were added to "Images" directory. The artifacts can be also found under "artifact" directory for testing purposes<br/>
 <br/>
 ![The stored artifacts of logged and registered XGBoost model in "Production" on S3 bucket](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/mlflow_artifacts_s3_production_model.png?raw=true)<br/>
 <br/>
