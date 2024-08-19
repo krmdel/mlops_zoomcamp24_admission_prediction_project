@@ -46,6 +46,7 @@ DATASET_PATH = os.getenv("LOCALPATH") # LOCALPATH for reading local csv file or 
 
 SEND_TIMEOUT = 10
 
+# SQL statement for creating a table to log model drift metrics
 create_table_statement = """
 drop table if exists admission_metrics;
 create table admission_metrics(
@@ -56,7 +57,17 @@ create table admission_metrics(
 )
 """
 
-def fetch_model(model_name=MODEL_NAME, alias="Production"):  
+def fetch_model(model_name=MODEL_NAME, alias="Production"): 
+    """
+    Fetch the latest version of a registered MLflow model.
+
+    Args:
+        model_name (str): The name of the model to fetch.
+        alias (str): The stage of the model (e.g., "Production").
+
+    Returns:
+        pipeline (sklearn.pipeline.Pipeline): The loaded machine learning model pipeline.
+    """ 
     mlflow.set_tracking_uri(f"http://{TRACKING_SERVER_HOST}:5000")
     model_artifact = f"models:/{model_name}@{alias}"
     pipeline = mlflow.sklearn.load_model(model_artifact)
@@ -67,6 +78,15 @@ def fetch_model(model_name=MODEL_NAME, alias="Production"):
 pipeline = fetch_model()
 
 def checked_features(data):
+    """
+    Prepare the input features by handling missing or empty values.
+
+    Args:
+        data (dict): The input data with raw features.
+
+    Returns:
+        dict: A dictionary with processed numerical and categorical features.
+    """
     features = {}
     # Handle numerical features
     for feature in numerical_features:
@@ -78,6 +98,15 @@ def checked_features(data):
     return features
 
 def predict(data):
+    """
+    Make a prediction using the preloaded model pipeline.
+
+    Args:
+        data (dict): The input data for prediction.
+
+    Returns:
+        str: The predicted outcome, either "admit" or "discharge".
+    """
     features = checked_features(data)
     vectorized_features = pipeline.named_steps['dictvectorizer'].transform([features])
     scaled_features = pipeline.named_steps['standardscaler'].transform(vectorized_features)
@@ -88,6 +117,15 @@ def predict(data):
 begin = datetime.datetime.now()
 
 def log_metrics_to_postgres(model_name, drift_score, num_drifted_columns, share_missing_values):
+    """
+    Log model drift metrics to a PostgreSQL database.
+
+    Args:
+        model_name (str): The name of the model.
+        drift_score (float): The drift score of the model predictions.
+        num_drifted_columns (int): The number of columns with detected drift.
+        share_missing_values (float): The proportion of missing values in the data.
+    """
     conn = psycopg2.connect(
         host=HOST,
         database=DBNAME,
@@ -108,11 +146,22 @@ def log_metrics_to_postgres(model_name, drift_score, num_drifted_columns, share_
     conn.close()
 
 def retraing(drift_score, num_drifted_columns, share_missing_values):
+    """
+    Retrain the model if drift exceeds a predefined threshold.
+
+    Args:
+        drift_score (float): The drift score triggering the retraining.
+        num_drifted_columns (int): The number of drifted columns.
+        share_missing_values (float): The proportion of missing values.
+
+    Returns:
+        str: The name of the newly trained model.
+    """
     print("\n")
     print("THRESHOLD FOR PREDICTION EXCEEDED!!!\n")
     print("CONDITIONAL WORKFLOW INITIATED!!!\n")
 
-    # Prepare dataset
+    # Prepare dataset for retraining
     print("Training dataset is prepared...")
     train_dicts, y_train, valid_dicts, y_valid, test_dicts, y_test, train_df, valid_df, test_df, path = split_dataset(
         numerical_features, categorical_features, target, path=DATASET_PATH
@@ -126,16 +175,16 @@ def retraing(drift_score, num_drifted_columns, share_missing_values):
     print("Model performances are compared...")
     best_model = compare_model_performances(train_dicts, y_train, valid_dicts, y_valid, test_dicts, y_test, path, numerical_features, categorical_features, target)
 
-    # # Hyperparameter tuning
+    # Hyperparameter tuning for the best model
     print("Best model is fine tuned...")
     model_name = f"admission_prediction_{best_model}_{date.today()}"
     hyperparameter_tuning(best_model, model_name, train_dicts, y_train, valid_dicts, y_valid, test_dicts, y_test, path)
 
-    # Evaluate models
+    # Evaluate models and register the best performing one
     print("Model is tested and registered...")
     evaluate_models(model_name, test_dicts, y_test)
 
-    # Evaluate tuned model against former production model
+    # Evaluate tuned model against the former production model
     new_model_name = compare_models_performance_and_select_best(MODEL_NAME, model_name, test_dicts, y_test)
 
     # Log metrics after retraining
@@ -143,6 +192,7 @@ def retraing(drift_score, num_drifted_columns, share_missing_values):
     log_metrics_to_postgres(model_name, drift_score, num_drifted_columns, share_missing_values)
     return new_model_name
 
+# Define how columns are mapped for drift analysis
 column_mapping = ColumnMapping(
     target=None,
     prediction='prediction',
@@ -150,6 +200,7 @@ column_mapping = ColumnMapping(
     categorical_features=categorical_features
 )
 
+# Setup a report for drift analysis using Evidently AI
 report = Report(metrics=[
     ColumnDriftMetric(column_name='prediction'),
     DatasetDriftMetric(),
@@ -158,6 +209,11 @@ report = Report(metrics=[
 
 @task
 def prep_db():
+    """
+    Prepare the PostgreSQL database and table for logging drift metrics.
+
+    Creates the database if it doesn't exist and initializes the metrics table.
+    """
     with psycopg.connect(f"host={HOST} port=5432 dbname=postgres user={USER} password={PASSWORD}", autocommit=True) as conn:
         res = conn.execute(f"SELECT 1 FROM pg_database WHERE datname='{DBNAME}'") # type: ignore
         if len(res.fetchall()) == 0:
@@ -172,6 +228,15 @@ def prep_db():
 
 @task
 def calculate_metrics_postgresql(curr, i, data, reference_data):
+    """
+    Calculate drift metrics for a batch of data and log them to PostgreSQL.
+
+    Args:
+        curr (psycopg2 cursor): The database cursor for executing SQL commands.
+        i (int): The current batch index.
+        data (pd.DataFrame): The raw data to analyze.
+        reference_data (pd.DataFrame): The reference data to compare against.
+    """
     global pipeline  # Use the global pipeline variable
     batch_size = len(data) // 1000
     start_idx = i * batch_size
@@ -207,6 +272,13 @@ def calculate_metrics_postgresql(curr, i, data, reference_data):
 
 @flow
 def batch_monitoring_backfill(reference_path=None, raw_path=None):
+    """
+    Perform batch monitoring and backfill historical data for drift analysis.
+
+    Args:
+        reference_path (str): The path to the reference dataset.
+        raw_path (str): The path to the raw dataset.
+    """
     # Prepare reference and raw data
     reference_data, raw_data = prepare_reference_and_raw_data(
         path=DATASET_PATH,

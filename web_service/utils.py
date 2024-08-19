@@ -8,11 +8,11 @@ import boto3
 
 from dotenv import load_dotenv
 
-# Load environment variables
+# Load environment variables from the .env file
 env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.env'))
 load_dotenv(dotenv_path=env_path)
 
-# S3 bucket configuration
+# S3 bucket configuration: Retrieve the bucket name from environment variables
 BUCKET_NAME = os.getenv('BUCKET_NAME')
 s3_client = boto3.client('s3')
 
@@ -24,43 +24,64 @@ def save_predictions_to_s3(results, bucket_name=BUCKET_NAME):
         results (list of dict): The prediction results to save.
         bucket_name (str): The name of the S3 bucket to upload to.
     """
-    # Convert the results to a DataFrame
+    # Convert the results list of dictionaries to a DataFrame for easier manipulation
     results_df = pd.DataFrame(results)
     
-    # Get the current date and time
+    # Get the current date and time to generate unique file names
     current_date = datetime.now().strftime("%Y_%m_%d")
     current_time = datetime.now().strftime("%H_%M_%S")
 
-    # Determine the file name based on the number of patients
+    # Generate a file name based on the number of predictions and the patient ID (if single prediction)
     if len(results) == 1:
         patient_id = results[0]['patient_id']
         file_name = f"admission_predictions_{patient_id}_{current_date}_{current_time}.csv"
     else:
         file_name = f"admission_predictions_batch_{len(results)}_{current_date}_{current_time}.csv"
     
-    # Create a folder name based on the current date
+    # Create a folder structure in S3 using the current date to organize files
     folder_name = f"admission_predictions/{current_date}"
     
-    # Convert DataFrame to CSV and save to S3
+    # Convert the DataFrame to a CSV format in memory using StringIO
     csv_buffer = StringIO()
     results_df.to_csv(csv_buffer, index=False)
+
+    # Upload the CSV data to the specified S3 bucket and folder
     s3_client = boto3.client('s3')
     s3_client.put_object(Bucket=bucket_name, Key=f"{folder_name}/{file_name}", Body=csv_buffer.getvalue())
     
     return f"s3://{bucket_name}/{folder_name}/{file_name}"
 
 def df_prepare(path):
+    """
+    Prepare a DataFrame from a large CSV file by loading it in chunks.
+
+    Args:
+        path (str): The file path to the CSV file.
+
+    Returns:
+        DataFrame: The prepared and cleaned DataFrame.
+    """
+        
+    # Get the total size of the file for progress tracking
     total_size = os.path.getsize(path)
+    
+    # Use tqdm to display a progress bar as the file is read and processed
     with tqdm(total=total_size, unit='B', unit_scale=True, desc=os.path.basename(path)) as pbar:
+        # Read the file in chunks to handle large files efficiently
         df = pd.read_csv(path, chunksize=500000)
+        # Concatenate chunks into a single DataFrame
         df = pd.concat([chunk for chunk in tqdm(df, total=total_size//1024, unit='chunks', leave=False)])
+        # Update the progress bar to indicate completion
         pbar.update(total_size)
     
+    # Clean and standardize column names by converting to lowercase and replacing spaces with underscores
     df.columns = df.columns.str.lower().str.replace(' ', '_')
     
+    # If the 'uid' column doesn't exist, create unique identifiers for each row
     if 'uid' not in df.columns:
         df['uid'] = [str(uuid.uuid4()) for _ in range(len(df))]
     
+    # Clean up categorical columns by standardizing text (lowercase, removing spaces, commas, colons)
     categorical_columns = list(df.dtypes[df.dtypes == 'object'].index)
     for c in categorical_columns:
         df[c] = df[c].str.lower().str.replace(' ', '_').str.replace(',', '').str.replace(':', '')
@@ -68,6 +89,18 @@ def df_prepare(path):
     return df
 
 def prepare_dictionaries(df):
+    """
+    Prepare the DataFrame for machine learning by separating features into numerical and categorical lists.
+
+    Args:
+        df (DataFrame): The input DataFrame containing patient data.
+
+    Returns:
+        list of dict: A list of dictionaries where each dictionary contains features for one patient.
+        list of str: A list of unique identifiers (UIDs) corresponding to each patient.
+    """
+
+    # Define the numerical and categorical features expected in the data
     numerical_features = [
         "age", "albumin_last", "albumin_max", "albumin_median", "albumin_min",
         "bloodculture,routine_count", "bloodculture,routine_last", "bloodculture,routine_npos",
@@ -92,18 +125,29 @@ def prepare_dictionaries(df):
 
     categorical_features = ['arrivalmode', 'gender', 'previousdispo']
 
+    # Fill missing values in numerical features with 0, and drop rows with missing categorical features
     df[numerical_features] = df[numerical_features].fillna(0)
     df = df.dropna(subset=categorical_features)
     df.loc[:, categorical_features] = df[categorical_features].astype(str)
 
-    # Merge numerical and categorical features into a list of dictionaries
+    # Merge numerical and categorical features into a list of dictionaries, one per patient
     feature_dicts = []
     for _, row in df.iterrows():
         features = {**row[numerical_features].to_dict(), **row[categorical_features].to_dict()}
         feature_dicts.append(features)
 
-    return feature_dicts, df['uid'].tolist()  # Return all dictionaries and their corresponding patient IDs
+    return feature_dicts, df['uid'].tolist() # Return both the feature dictionaries and their corresponding UIDs
 
 def return_data(path):
-    df = df_prepare(path)
-    return prepare_dictionaries(df)
+    """
+    Load a CSV file and prepare it for machine learning predictions.
+
+    Args:
+        path (str): The file path to the CSV file.
+
+    Returns:
+        list of dict: A list of feature dictionaries for each patient.
+        list of str: A list of unique identifiers (UIDs) corresponding to each patient.
+    """
+    df = df_prepare(path) # Prepare and clean the DataFrame from the CSV
+    return prepare_dictionaries(df) # Prepare the dictionaries and return the data
