@@ -1,0 +1,20 @@
+artifact_path: admission_prediction_xgboost_model_2024-08-18
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.10.12
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.5.1
+mlflow_version: 2.15.1
+model_size_bytes: 335806
+model_uuid: ef777f8f61a4474b85af49e205f003fa
+run_id: ef3ab37373074f6f8044dc4e3be2740c
+utc_time_created: '2024-08-18 10:22:11.191029'
