@@ -1,4 +1,4 @@
-**MLflow Experiment Tracking with Docker and Grafana**<br/>
+**Monitoring of the model performance using MLflow Experiment Tracking with Docker and Grafana**<br/>
 <br/>
 This repository contains scripts and instructions for setting up an MLflow tracking server on AWS, along with Grafana and Adminer for monitoring and database management. Follow the steps below to set up your environment and start tracking your machine learning experiments.<br/>
 <br/>
@@ -106,9 +106,9 @@ Adminer: You should have below credentials from RDS for logging in:<br/>
 <br/>
 **4.Running monitoring script**<br/>
 <br/>
-In monitoring directory, run python admission_metrics_calculation.py<br/>
+In monitoring directory, run `python admission_metrics_calculation.py`<br/>
 <br/>
-Once the script is run, it fetches the latest production model from MLflow. We do not have a time series patient data, therefore, the script generates raw and reference data by randomly sample from dataset and simulates as if data is being received throughout the future time points. However, if any other reference and raw data is available, the path of csv files can be given for performing predictions and monitoring.<br/>
+Once the script is run, it fetches the latest production model from MLflow. Since we do not have a time series patient data, therefore, the script generates raw and reference data by randomly sample from dataset and simulates as if data is being received throughout the future time points. However, if any other reference and raw data is available, the path of csv files can be given for performing predictions and monitoring.<br/>
 <br/>
 The script monitors the prediction drift over time to decide whether model’s performance degrades. The recent threshold was set as 0.6. If the threshold is exceeded, it calls retraining function to initiate conditional workflow and logs all the model training and performance comparisons. For simplicity, workflow involves sklearn’s logistic regression and XGBoost models for training and comparison and then further hyperparameter search for fine-tuning. However, various models can be added in the future to model zoo.<br/>
 <br/>
