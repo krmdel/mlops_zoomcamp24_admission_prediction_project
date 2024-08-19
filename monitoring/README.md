@@ -64,11 +64,11 @@ Export the necessary environment variables required for MLflow to interact with 
 <br/>
 Start the MLflow server with PostgreSQL as the backend store and S3 as the artifact storage:<br/>
 <br/>
-`mlflow server -h 0.0.0.0 -p 5000 \<br/>
+`mlflow server -h 0.0.0.0 -p 5000 \`<br/>
 <br/>
-    --backend-store-uri postgresql://${DB_USER}:${DB_PASSWORD}@${DB_ENDPOINT}:5432/DB_NAME \<br/>
+    `--backend-store-uri postgresql://${DB_USER}:${DB_PASSWORD}@${DB_ENDPOINT}:5432/DB_NAME \`<br/>
 <br/>
-    --default-artifact-root s3://${S3_BUCKET_NAME}`<br/>
+    `--default-artifact-root s3://${S3_BUCKET_NAME}`<br/>
 <br/>
 •	Replace DB_NAME with your PostgreSQL database name from RDS.<br/>
 <br/>
