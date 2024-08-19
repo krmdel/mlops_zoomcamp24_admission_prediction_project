@@ -50,13 +50,13 @@ Docker Compose:<br/>
 <br/>
 Export the necessary environment variables required for MLflow to interact with your PostgreSQL database and S3 bucket:<br/>
 <br/>
-`export DB_USER=<your_db_user><br/>
+`export DB_USER=<your_db_user>`<br/>
 <br/>
-export DB_PASSWORD=<your_db_password><br/>
+`export DB_PASSWORD=<your_db_password>`<br/>
 <br/>
-export DB_ENDPOINT=<your_db_endpoint><br/>
+`export DB_ENDPOINT=<your_db_endpoint>`<br/>
 <br/>
-export S3_BUCKET_NAME=<your_s3_bucket_name>`<br/>
+`export S3_BUCKET_NAME=<your_s3_bucket_name>`<br/>
 <br/>
 **Step-by-Step Instructions**<br/>
 <br/>
