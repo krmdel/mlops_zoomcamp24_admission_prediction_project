@@ -138,7 +138,7 @@ Streamlit UI showing prediction results of multiple patients<br/>
 <br/>
 ![Streamlit UI showing prediction results of multiple patients](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/streamlit_multiple_patient_prediction.png?raw=true)<br/>
 <br/>
-The results are saved in S3 bucket<br/>
+The prediction results (admission prediction and corresponding patient ID) are saved in S3 bucket. The CSV prediction files can be found under "results" directory<br/>
 <br/>
 ![The results are saved in S3 bucket](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/s3_predictions.png?raw=true)<br/>
 <br/>
