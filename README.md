@@ -20,7 +20,8 @@ The Admission Prediction Web Service is a Flask API designed to predict the prob
 <br/>
 **Key Features**<br/>
 <br/>
-**- Enhanced Predictive Accuracy:** By integrating both triage and patient history data, the web service achieves higher predictive accuracy compared to models using triage data alone.
+**- Enhanced Predictive Accuracy:** By integrating both triage and patient history data, the web service achieves higher predictive accuracy compared to models using triage data alone.<br/>
+<br/>
 **- Scalable Deployment:** Deployed on AWS infrastructure, ensuring scalability and reliability.<br/>
 <br/>
 **- User-Friendly Interface:** Streamlit-based interface makes it easy for healthcare professionals to upload data and receive predictions.<br/>
