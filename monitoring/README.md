@@ -82,6 +82,8 @@ Use Docker Compose to start Grafana for monitoring and Adminer for database mana
 <br/>
 `cd ./monitoring`<br/>
 <br/>
+Update RDS endpoint in config file: .\monitoring\config\grafana_dashboards.yaml<br/>
+<br/>
 `docker-compose up --build`<br/>
 <br/>
 Grafana: Access Grafana at http://EC2_ENDPOINT:3000<br/>
