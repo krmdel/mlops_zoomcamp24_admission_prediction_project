@@ -1,3 +1,4 @@
+![Admission decisions are crucial in emergency rooms](images\emergency.jpg)
 **Admission Prediction Web Service**<br/>
 <br/>
 This project addresses the critical challenge of predicting hospital admissions at the time of emergency department (ED) triage by leveraging both patient history and triage information. Accurate prediction of hospital admission can significantly enhance patient care and resource allocation in healthcare settings.<br/>
