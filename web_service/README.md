@@ -129,6 +129,7 @@ Start the Streamlit application by running:<br/>
 `streamlit run app.py`<br/>
 <br/>
 Once the above steps are completed, docker is up and running/Streamlit can access docker, Streamlit UI provides an easy-to-use and informative screen to both provide path of CSV file or upload it for model to make predictions (admission/discharge). The patient ID, patient’s health information and prediction are displayed in UI. Model can make multiple predictions on a CSV file including many patients. Dropdown menu shows each patient and by clicking each of them, the predictions and patient information can be accessed. After predictions are made, the results are uploaded to S3 bucket by creating a new folder and name the prediction file as JSON with date and patient ID to easy access.<br/>
+<br/>
 Streamlit UI showing prediction result of a patient<br/>
 <br/>
 ![Streamlit UI showing prediction result of a patient](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/streamlit_one_patient_prediction.png?raw=true)<br/>
