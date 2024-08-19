@@ -35,7 +35,7 @@ Environment Setup<br/>
 Use pipenv to create a virtual environment and install the required dependencies:<br/>
 <br/>
 ```bash
-pipenv install scikit-learn==1.5.1 xgboost==2.1.0 mlflow flask boto3 tqdm joblib python-dotenv gunicorn --python==3.10<br/>
+pipenv install scikit-learn==1.5.1 xgboost==2.1.0 mlflow flask boto3 tqdm joblib python-dotenv gunicorn --python==3.10```<br/>
 <br/>
 2.	Activate the Virtual Environment:<br/>
 <br/>
