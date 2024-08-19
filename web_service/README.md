@@ -4,17 +4,17 @@ This repository contains a web service for predicting admissions using machine l
 <br/>
 **Table of Contents**<br/>
 <br/>
-**Prerequisites**<br/>
+•	**Prerequisites**<br/>
 <br/>
-**Environment Setup**<br/>
+•	**Environment Setup**<br/>
 <br/>
-**Building and Running Docker**<br/>
+•	**Building and Running Docker**<br/>
 <br/>
-**Publishing Docker Image to ECR**<br/>
+•	**Publishing Docker Image to ECR**<br/>
 <br/>
-**Running Docker Image from ECR**<br/>
+•	**Running Docker Image from ECR**<br/>
 <br/>
-**References**<br/>
+•	**References**<br/>
 <br/>
 **Prerequisites**<br/>
 <br/>
