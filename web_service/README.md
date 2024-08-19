@@ -54,7 +54,7 @@ Build the Docker image for the web service:<br/>
 <br/>
 **Export your AWS credentials and region as environment variables**<br/>
 <br/>
-`export AWS_ACCESS_KEY_ID=<your_aws_access_key_id><br/>`
+`export AWS_ACCESS_KEY_ID=<your_aws_access_key_id>`<br/>
 <br/>
 `export AWS_SECRET_ACCESS_KEY=<your_aws_secret_access_key>`<br/>
 <br/>
@@ -64,12 +64,12 @@ Build the Docker image for the web service:<br/>
 <br/>
 Run the Docker container locally, exposing the necessary ports and passing the AWS credentials:<br/>
 <br/>
-`docker run -it --rm \<br/>
-    -p 9696:9696 \<br/>
-    -e AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \<br/>
-    -e AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \<br/>
-    -e AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION}" \<br/>
-    admission_prediction_service:v1`<br/>
+`docker run -it --rm \`
+    `-p 9696:9696 \`
+    `-e AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \`
+    `-e AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \`
+    `-e AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION}" \`
+    `admission_prediction_service:v1`<br/>
 <br/>
 **Publishing Docker Image to ECR**<br/>
 <br/>
