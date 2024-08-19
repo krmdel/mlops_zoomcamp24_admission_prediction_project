@@ -2,21 +2,21 @@
 <br/>
 This repository contains a web service for predicting admissions using machine learning models. The service is built with Flask, and the models are managed with MLflow. The instructions below guide you through setting up the environment, building and running the Docker container, and deploying the Docker image to AWS Elastic Container Registry (ECR).<br/>
 <br/>
-Table of Contents<br/>
+**Table of Contents**<br/>
 <br/>
-Prerequisites<br/>
+**Prerequisites**<br/>
 <br/>
-Environment Setup<br/>
+**Environment Setup**<br/>
 <br/>
-Building and Running Docker<br/>
+**Building and Running Docker**<br/>
 <br/>
-Publishing Docker Image to ECR<br/>
+**Publishing Docker Image to ECR**<br/>
 <br/>
-Running Docker Image from ECR<br/>
+**Running Docker Image from ECR**<br/>
 <br/>
-References<br/>
+**References<br/>
 <br/>
-Prerequisites<br/>
+**Prerequisites**<br/>
 <br/>
 Before you begin, ensure you have the following:<br/>
 <br/>
@@ -28,18 +28,15 @@ AWS CLI configured with your credentials.<br/>
 <br/>
 AWS Elastic Container Registry (ECR) set up.<br/>
 <br/>
-Environment Setup<br/>
+**Environment Setup**<br/>
 <br/>
-1.	Create a Virtual Environment and Install Dependencies:<br/>
+**1.Create a Virtual Environment and Install Dependencies**<br/>
 <br/>
 Use pipenv to create a virtual environment and install the required dependencies:<br/>
 <br/>
-```
-pipenv install scikit-learn==1.5.1 xgboost==2.1.0 mlflow flask boto3 tqdm joblib python-dotenv gunicorn --python==3.10
-```
+`pipenv install scikit-learn==1.5.1 xgboost==2.1.0 mlflow flask boto3 tqdm joblib python-dotenv gunicorn --python==3.10`
 <br/>
-<br/>
-2.	Activate the Virtual Environment:<br/>
+**2.Activate the Virtual Environment**<br/>
 <br/>
 Enter the virtual environment created by pipenv:<br/>
 <br/>
