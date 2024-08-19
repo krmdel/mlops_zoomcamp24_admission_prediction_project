@@ -180,7 +180,7 @@ def hyperparameter_tuning(best_model, model_name, train_dicts, y_train, valid_di
         fn=lambda params: objective(params, best_model, model_name, train_dicts, y_train, valid_dicts, y_valid, test_dicts, y_test, path),
         space=space,
         algo=tpe.suggest,
-        max_evals=10,
+        max_evals=2, # update the number of evaluation
         trials=trials
     )
 

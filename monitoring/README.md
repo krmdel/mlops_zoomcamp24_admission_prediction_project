@@ -112,13 +112,17 @@ In monitoring directory, run `python admission_metrics_calculation.py`<br/>
 <br/>
 Once the script is run, it fetches the latest production model from MLflow. Since we do not have a time series patient data, therefore, the script generates raw and reference data by randomly sample from dataset and simulates as if data is being received throughout the future time points. However, if any other reference and raw data is available, the path of csv files can be given for performing predictions and monitoring.<br/>
 <br/>
-The script monitors the prediction drift over time to decide whether model’s performance degrades. The recent threshold was set as 0.6. If the threshold is exceeded, it calls retraining function to initiate conditional workflow and logs all the model training and performance comparisons. For simplicity, workflow involves sklearn’s logistic regression and XGBoost models for training and comparison and then further hyperparameter search for fine-tuning. However, various models can be added in the future to model zoo.<br/>
+The script monitors the prediction drift over time to decide whether model’s performance degrades. The recent threshold was set as 0.6. If the threshold is exceeded, it calls retraining function to initiate conditional workflow and logs all the model training and performance comparisons. For simplicity, workflow involves sklearn’s logistic regression and XGBoost models for training with logging, performance comparison and then further hyperparameter search for best performing model for 2 evaluation steps (can be increased in hyperparameter tuning.py) for fine-tuning on MLflow. However, various models can be added in the future to model zoo.<br/>
 <br/>
 After training and registering the best performing model, this model is compared against the model already in production. If the performance improvement is obtained, the deployed model is replaced with newly trained model and monitoring is kept carried out.<br/>
 <br/>
-Model Registry and assigning the best performing model for "Production"<br/>
+Model Registry and assigning the best performing model for "Production" on MLflow<br/>
 <br/>
 ![Model Registry and assigning the best performing model for "Production"](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/mlflow.png?raw=true)<br/>
+<br/>
+The stored artifacts of logged and registered XGBoost model in "Production" on S3 bucket<br/>
+<br/>
+![The stored artifacts of logged and registered XGBoost model in "Production" on S3 bucket](https://github.com/krmdel/mlops_zoomcamp24_admission_prediction_project/blob/main/Images/mlflow_artifacts_s3_production_model.png?raw=true)<br/>
 <br/>
 Model monitoring: showing a case where prediction drift exceeded the threshold of 0.6 which triggered conditional workflow for retraining model and logging<br/>
 <br/>
