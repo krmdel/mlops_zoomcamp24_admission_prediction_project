@@ -80,7 +80,7 @@ MLflow UI: Access the MLflow UI at http://EC2_ENDPOINT:5050<br/>
 <br/>
 Use Docker Compose to start Grafana for monitoring and Adminer for database management:<br/>
 <br/>
-`cd ../monitoring`<br/>
+`cd ./monitoring`<br/>
 <br/>
 `docker-compose up --build`<br/>
 <br/>
