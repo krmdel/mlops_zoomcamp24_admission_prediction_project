@@ -1,4 +1,4 @@
-Admission Prediction Web Service<br/>
+**Admission Prediction Web Service**<br/>
 <br/>
 This repository contains a web service for predicting admissions using machine learning models. The service is built with Flask, and the models are managed with MLflow. The instructions below guide you through setting up the environment, building and running the Docker container, and deploying the Docker image to AWS Elastic Container Registry (ECR).<br/>
 <br/>
